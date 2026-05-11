@@ -1,0 +1,132 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #055269  ;
+}
+
+.welcome-logo-wrap {
+  text-align: left;
+  padding: 1rem 2rem;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  align-self: stretch;
+}
+
+.welcome-card {
+background: #ecb920;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: auto 0;
+    border: 3px solid #fff;
+}
+
+.welcome-card h2 {
+margin: 0;
+    font-size: 1.75rem;
+    color: #2c3e50;
+    text-align: center;
+    background-color: #e17e23;
+    border: 2px solid #fff;
+    border-radius: 77px;
+    padding: 8px;
+}
+
+.welcome-guidelines h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.welcome-card > h3 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  font-size: 1.15rem;
+  text-decoration: underline;
+} 
+
+.welcome-guidelines {
+  background-color: #017f8d ;
+  border-left: 4px solid #607145 ;
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.welcome-guidelines p {
+  margin: 0;
+}
+
+.welcome-divider {
+  height: 3px;
+  background-color: #d19525;
+  margin: 0.5rem 0;
+}
+
+.welcome-input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+  background-color: #ffffff;
+  color: #2c3e50;
+  -webkit-text-fill-color: #2c3e50;
+}
+
+.welcome-input:focus {
+  border-color: #2c3e50;
+}
+
+.welcome-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: #444;
+  cursor: pointer;
+}
+
+.welcome-note {
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0;
+  font-style: italic;
+  text-align: center;
+}
+
+.welcome-btn {
+  padding: 0.65rem;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.welcome-btn:hover {
+  background-color: #3d5166;
+}
+
+.welcome-success {
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
