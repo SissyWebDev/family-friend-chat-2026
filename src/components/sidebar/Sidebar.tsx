@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import "./Sidebar.css";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [activeChatsOpen, setActiveChatsOpen] = useState(false);
   const { selectedChannel, setSelectedChannel } = useChat();
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <nav className="sidebar-nav">
@@ -56,6 +60,14 @@ const Sidebar = () => {
       >
         Archive
       </div>
+      {isAdmin && (
+        <div
+          className="sidebar-item admin-link"
+          onClick={() => navigate("/admin")}
+        >
+          ⚙ Admin
+        </div>
+      )}
     </nav>
   );
 };

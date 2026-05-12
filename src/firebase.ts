@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCAdpJT3kFwM2FxTk9WpVVEp7U4K5B8u5w",
-  authDomain: "family-friend-chat-2026.firebaseapp.com",
-  projectId: "family-friend-chat-2026",
-  storageBucket: "family-friend-chat-2026.firebasestorage.app",
-  messagingSenderId: "10011513215",
-  appId: "1:10011513215:web:791637c602942dd1798a4a",
-  measurementId: "G-B3KD0GMRL6"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

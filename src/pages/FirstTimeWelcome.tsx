@@ -1,21 +1,38 @@
 import { useState } from "react";
 import logo from "../assets/Logo_1_FamilyFriend_Multi_01.png";
 import "./FirstTimeWelcome.css";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const FirstTimeWelcome = () => {
   const [screenName, setScreenName] = useState("");
   const [email, setEmail] = useState("");
   const [showEmail, setShowEmail] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    if (!screenName || !email) {
-      alert("Please fill in both your screen name and email.");
-      return;
-    }
-    // Will write to Firestore here in the next step
-    setSubmitted(true);
-  };
+  const handleSubmit = async () => {
+  if (!screenName || !email) {
+    alert("Please fill in both your screen name and email.");
+    return;
+  }
+
+  try {
+    await setDoc(doc(db, "users", currentUser!.uid), {
+      screenName,
+      email,
+      showEmail,
+      isAdmin: false,
+      createdAt: new Date(),
+    });
+    navigate("/");
+  } catch (err) {
+    alert("Something went wrong. Please try again.");
+  }
+};
 
   if (submitted) {
     return (
@@ -42,7 +59,7 @@ const FirstTimeWelcome = () => {
           <p><strong>Etiquette & Expectations:</strong> Please be respectful and supportive of all members. This is a private, invite-only community.</p>
           <p><strong>Moderator Rules:</strong> The admin may remove posts that violate community standards without notice.</p>
           <p><strong>Content Limitations:</strong> No promotional content, spam, or off-topic posts. Keep conversations relevant to Family Friend events and announcements.</p>
-          <p><strong>Archive Protocol:</strong> General Chat is archived monthly. Past event chats are moved to the Archive folder after the event date.</p>
+          <p><strong>Archive Protocol:</strong> General Chat is archived monthly. Past Event Chats are moved to the Archive folder after the event date.</p>
         </div>
 
         <div className="welcome-divider" />

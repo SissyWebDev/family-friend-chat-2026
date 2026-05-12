@@ -34,6 +34,8 @@ const ChatArea = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { isAdmin } = useAuth();
+console.log("isAdmin:", isAdmin);
 
   useEffect(() => {
     if (!selectedChannel) return;

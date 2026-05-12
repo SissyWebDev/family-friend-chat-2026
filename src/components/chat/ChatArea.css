@@ -7,7 +7,7 @@
   background-color: #e17e23;
   border: 2px solid #fff;
   border-radius: 77px;
-  padding: 8px;
+  padding: 10px 0 8px 0;
 }
 
 .chat-placeholder {
@@ -31,7 +31,7 @@
 }
 
 .chat-screen-name {
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #666;
 }
@@ -56,7 +56,7 @@
 }
 
 .chat-text {
-  font-size: 0.9rem;
+  font-size: 1.25rem;
 }
 
 .chat-timestamp {

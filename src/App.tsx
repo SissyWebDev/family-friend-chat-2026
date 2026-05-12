@@ -3,6 +3,7 @@ import MainLayout from "./components/layout/MainLayout";
 import SignIn from "./pages/SignIn";
 import FirstTimeWelcome from "./pages/FirstTimeWelcome";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );
