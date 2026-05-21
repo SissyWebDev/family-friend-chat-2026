@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import "./Admin.css";
 import MemberManager from "../components/admin/MemberManager";
+import ChannelManager from "../components/admin/ChannelManager";
+import ArchiveGeneralChat from "../components/admin/ArchiveGeneralChat";
+import StorageCounter from "../components/admin/StorageCounter";
 
 const Admin = () => {
   const { isAdmin, loading } = useAuth();
@@ -18,6 +21,9 @@ const Admin = () => {
     <div className="admin-container">
       <div className="admin-header">
         <h2>Admin Panel</h2>
+        <button className="admin-back-btn" onClick={() => navigate("/admin-guide")}>
+          📋 Admin Guide
+        </button>
         <button className="admin-back-btn" onClick={() => navigate("/")}>
           ← Back to Chat
         </button>
@@ -33,14 +39,21 @@ const Admin = () => {
         <section className="admin-section">
           <h3>Channels</h3>
           <p>Add new Active Chat folders or move to Archive.</p>
-          {/* Channel management will go here */}
+          <ChannelManager />
+        </section>
+
+        <section className="admin-section">
+          <h3>Archive General Chat</h3>
+          <p>Move current General Chat messages to a monthly archive folder.</p>
+          <ArchiveGeneralChat />
         </section>
 
         <section className="admin-section">
           <h3>Storage</h3>
-          <p>Monitor Firestore usage.</p>
-          {/* Storage counter will go here */}
+          <p>Monitor Firestore usage — archive older chats when approaching limits.</p>
+          <StorageCounter />
         </section>
+
       </div>
     </div>
   );

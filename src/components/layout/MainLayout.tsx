@@ -3,13 +3,18 @@ import { Outlet } from "react-router-dom";
 import "./MainLayout.css";
 import Sidebar from "../sidebar/Sidebar";
 import ChatArea from "../chat/ChatArea";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const MainLayout = () => {
   return (
     <div className="main-container">
-    <header className="app-header">
-      <img src={logo} alt="Family Friend" className="app-logo" />
-    </header>
+      <header className="app-header">
+        <img src={logo} alt="Family Friend" className="app-logo" />
+        <button className="signout-btn" onClick={() => signOut(auth)}>
+          Sign Out
+        </button>
+      </header>
       <div className="app-body">
         <aside className="sidebar">
           <Sidebar />

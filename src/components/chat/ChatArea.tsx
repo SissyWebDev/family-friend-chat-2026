@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { doc, getDoc } from "firebase/firestore";
 import {
   collection,
   addDoc,
@@ -29,8 +30,9 @@ interface Message {
 }
 
 const ChatArea = () => {
-  const { selectedChannel } = useChat();
+  const { selectedChannel, selectedChannelData } = useChat();
   const { currentUser } = useAuth();
+  const [screenName, setScreenName] = useState("Member");
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -61,14 +63,26 @@ console.log("isAdmin:", isAdmin);
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => {
+  useEffect(() => {
+    const fetchScreenName = async () => {
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setScreenName(userDoc.data().screenName ?? "Member");
+        }
+      }
+    };
+    fetchScreenName();
+  }, [currentUser]);
+
+ const handleSend = async () => {
     if (!newMessage.trim() || !selectedChannel) return;
 
     await addDoc(
       collection(db, "channels", selectedChannel, "messages"),
       {
         text: newMessage.trim(),
-        screenName: currentUser?.displayName ?? currentUser?.email ?? "Member",
+        screenName: screenName,
         uid: currentUser?.uid,
         timestamp: serverTimestamp(),
       }
@@ -83,9 +97,7 @@ console.log("isAdmin:", isAdmin);
   return (
     <div className="chat-area-container">
       <div className="chat-header">
-        {selectedChannel
-          ? channelLabels[selectedChannel]
-          : "Select a channel"}
+        {selectedChannelData?.name ?? "Select a channel to get started"}
       </div>
       <div className="chat-messages">
         {!selectedChannel && (
@@ -104,7 +116,7 @@ console.log("isAdmin:", isAdmin);
         ))}
         <div ref={bottomRef} />
       </div>
-      {selectedChannel && selectedChannel !== "archive" && (
+      {(selectedChannelData?.type === "active" || selectedChannelData?.type === "general") && (
         <div className="chat-input-bar">
           <input
             type="text"

@@ -5,44 +5,58 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 
 const FirstTimeWelcome = () => {
   const [screenName, setScreenName] = useState("");
   const [email, setEmail] = useState("");
   const [showEmail, setShowEmail] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [tempPassword, setTempPassword] = useState("");
 
   const handleSubmit = async () => {
-  if (!screenName || !email) {
-    alert("Please fill in both your screen name and email.");
-    return;
-  }
+    if (!screenName || !email) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    const passwordRegex = /^(?=.*[0-9]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      alert("Password must be at least 8 characters and include at least one number.");
+      return;
+    }
 
-  try {
-    await setDoc(doc(db, "users", currentUser!.uid), {
-      screenName,
-      email,
-      showEmail,
-      isAdmin: false,
-      createdAt: new Date(),
-    });
-    navigate("/");
-  } catch (err) {
-    alert("Something went wrong. Please try again.");
-  }
-};
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
 
-  if (submitted) {
-    return (
-      <div className="welcome-container">
-        <p className="welcome-success">
-          You're all set! Redirecting you to the chat...
-        </p>
-      </div>
-    );
-  }
+    try {
+      if (currentUser && currentUser.email) {
+        const credential = EmailAuthProvider.credential(
+          currentUser.email,
+          tempPassword
+        );
+        await reauthenticateWithCredential(currentUser, credential);
+        await updatePassword(currentUser, password);
+      }
+      await setDoc(doc(db, "users", currentUser!.uid), {
+        screenName,
+        email,
+        showEmail,
+        isAdmin: false,
+        createdAt: new Date(),
+      });
+      navigate("/");
+    } catch (err: any) {
+      console.error("Full error:", err);
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      alert("Something went wrong: " + err.message);
+    }
+  };
 
   return (
     <div className="welcome-container">
@@ -81,6 +95,33 @@ const FirstTimeWelcome = () => {
           className="welcome-input"
         />
 
+        <input
+          type="password"
+          placeholder="Temporary Password (from your invite email)"
+          value={tempPassword}
+          onChange={(e) => setTempPassword(e.target.value)}
+          className="welcome-input"
+        />
+        <input
+          type="password"
+          placeholder="Create a Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="welcome-input"
+        />
+
+        <p className="welcome-note">
+          Password must be at least 8 characters and include at least one number.
+        </p>
+        
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          className="welcome-input"
+        />
+
         <label className="welcome-checkbox-label">
           <input
             type="checkbox"
@@ -95,10 +136,9 @@ const FirstTimeWelcome = () => {
         </button>
 
         <p className="welcome-note">
-          **Your email is always captured privately for account purposes regardless of this setting.**
+          Your email is always captured privately for account purposes regardless of this setting.
           <br />Please find a link to our Privacy Statement on the Home Page
         </p>
-
 
       </div>
     </div>

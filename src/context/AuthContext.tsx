@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -7,12 +7,16 @@ import { auth, db } from "../firebase";
 interface AuthContextType {
   currentUser: User | null;
   isAdmin: boolean;
+  isAllowed: boolean;
+  unauthorized: boolean;
   loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   isAdmin: false,
+  isAllowed: false,
+  unauthorized: false,
   loading: true,
 });
 
@@ -22,40 +26,64 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isAllowed, setIsAllowed] = useState(false);
+  const [unauthorized, setUnauthorized] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user && user.email) {
+      // Check allowlist before granting access
+      const allowDoc = await getDoc(doc(db, "allowedMembers", user.email));
 
-      if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        setIsAdmin(userDoc.exists() && userDoc.data()?.isAdmin === true);
-      } else {
-        setIsAdmin(false);
-      }
-
+    if (!allowDoc.exists()) {
+      await signOut(auth);
+      setCurrentUser(null);
+      setIsAdmin(false);
+      setIsAllowed(false);
+      setUnauthorized(true);
       setLoading(false);
-    });
+      return;
+    }
+
+      // Email is allowed — now check admin status
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      setIsAdmin(userDoc.exists() && userDoc.data()?.isAdmin === true);
+      setCurrentUser(user);
+      setIsAllowed(true);
+      setUnauthorized(false);
+    } else {
+      setCurrentUser(null);
+      setIsAdmin(false);
+      setIsAllowed(false);
+      setUnauthorized(false);
+    }
+
+    setLoading(false);
+  });
 
     return unsubscribe;
   }, []);
 
+  const content = () => {
+    if (loading) return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", fontSize: "1rem", color: "#2c3e50" }}>
+        Loading...
+      </div>
+    );
+
+    if (!isAllowed && currentUser !== null) return (
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100vh", fontSize: "1rem", color: "#2c3e50", gap: "1rem" }}>
+        <p>You're not authorized to access this app.</p>
+        <p>Please contact the administrator to request access.</p>
+      </div>
+    );
+
+    return <>{children}</>;
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser, isAdmin, loading }}>
-      {loading ? (
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontSize: "1rem",
-          color: "#2c3e50"
-        }}>
-          Loading...
-        </div>
-      ) : (
-        children
-      )}
+    <AuthContext.Provider value={{ currentUser, isAdmin, isAllowed, unauthorized, loading }}>
+      {content()}
     </AuthContext.Provider>
   );
 };

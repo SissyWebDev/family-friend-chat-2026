@@ -46,3 +46,24 @@
   padding: 1rem;
   background-color: #ecb920;
 }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.signout-btn {
+  background-color: #055269 ;
+  border: 2px solid #ecb920;
+  border-radius: 77px;
+  color: white;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.15s ease;
+}
+
+.signout-btn:hover {
+  background-color: #e17e23 ;
+}

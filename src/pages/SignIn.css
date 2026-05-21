@@ -93,38 +93,11 @@
   background-color: #3d5166;
 }
 
-.signin-btn.google {
-  background-color: #607145 ;
-  color: #fff;
-  border: 1px solid #ccc;
-}
-
-.signin-btn.google:hover {
-    color: #fff;
-  background-color: #055269 ;
-}
-
-.signin-divider {
-  text-align: center;
-  color: #aaa;
+.signin-unauthorized {
+  background-color: #2c3e50;
+  color: #fff !important;
+  border-radius: 4px;
+  padding: 0.6rem 0.75rem;
   font-size: 0.85rem;
-  position: relative;
-}
-
-.signin-divider::before,
-.signin-divider::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 42%;
-  height: 1px;
-  background-color: #ddd;
-}
-
-.signin-divider::before {
-  left: 0;
-}
-
-.signin-divider::after {
-  right: 0;
+  line-height: 1.4;
 }

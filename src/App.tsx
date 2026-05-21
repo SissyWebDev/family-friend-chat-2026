@@ -4,6 +4,8 @@ import SignIn from "./pages/SignIn";
 import FirstTimeWelcome from "./pages/FirstTimeWelcome";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import Admin from "./pages/Admin";
+import AdminGuide from "./docs/AdminGuide";
+import PrivacyStatement from "./docs/PrivacyStatement";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           }
         />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin-guide" element={<AdminGuide />} />
+        <Route path="/privacy" element={<PrivacyStatement />} />
       </Routes>
     </BrowserRouter>
   );
