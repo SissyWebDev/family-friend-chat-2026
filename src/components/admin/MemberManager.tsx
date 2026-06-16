@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 interface Member {
@@ -33,7 +33,18 @@ const MemberManager = () => {
     );
     if (!confirmed) return;
 
+    // Fetch the user's email before deleting, so we can remove from allowedMembers
+    const userDoc = await getDoc(doc(db, "users", uid));
+    const email = userDoc.data()?.email;
+
+    // Delete from users collection
     await deleteDoc(doc(db, "users", uid));
+
+    // Delete from allowedMembers collection if email was found
+    if (email) {
+      await deleteDoc(doc(db, "allowedMembers", email));
+    }
+
     setMembers((prev) => prev.filter((m) => m.uid !== uid));
   };
 

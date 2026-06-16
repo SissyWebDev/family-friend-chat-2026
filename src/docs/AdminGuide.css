@@ -84,3 +84,26 @@
   white-space: pre-wrap;
   color: #2c3e50;
 }
+
+/* ADD: */
+.guide-event-card-example {
+  background-color: #f9f9f9;
+  border-left: 4px solid #2c3e50;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #2c3e50;
+}
+
+.guide-event-card-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.guide-event-card-example ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}

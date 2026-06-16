@@ -6,6 +6,7 @@ import MemberManager from "../components/admin/MemberManager";
 import ChannelManager from "../components/admin/ChannelManager";
 import ArchiveGeneralChat from "../components/admin/ArchiveGeneralChat";
 import StorageCounter from "../components/admin/StorageCounter";
+import AnnouncementManager from "../components/admin/AnnouncementManager";
 
 const Admin = () => {
   const { isAdmin, loading } = useAuth();
@@ -52,6 +53,12 @@ const Admin = () => {
           <h3>Storage</h3>
           <p>Monitor Firestore usage — archive older chats when approaching limits.</p>
           <StorageCounter />
+        </section>
+
+        <section className="admin-section">
+          <h3>Announcements</h3>
+          <p>Post new announcements to the Announcements page. Archive to hide from members.</p>
+          <AnnouncementManager />
         </section>
 
       </div>

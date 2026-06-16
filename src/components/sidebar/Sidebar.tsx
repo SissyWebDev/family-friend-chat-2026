@@ -13,7 +13,7 @@ interface Channel {
   type: string;
 }
 
-const Sidebar = () => {
+const Sidebar = ({ onNavigate, selectedPage }: { onNavigate?: () => void; selectedPage?: string }) => {
   const [activeChatsOpen, setActiveChatsOpen] = useState(false);
   const [activeChannels, setActiveChannels] = useState<Channel[]>([]);
   const [archiveOpen, setArchiveOpen] = useState(false);
@@ -58,13 +58,26 @@ const Sidebar = () => {
 
   return (
     <nav className="sidebar-nav">
+      {/* Announcements */}
+      <div
+        className={`sidebar-item ${selectedPage === "announcements" ? "active" : ""}`}
+        onClick={() => {
+          navigate("/announcements");
+          onNavigate?.();
+        }}
+      >
+        📣 Announcements
+      </div>     
+      
       {/* General Chat */}
       <div
         className={`sidebar-item ${selectedChannel === "general" ? "active" : ""}`}
-        onClick={() => {
-          setSelectedChannel("general");
-          setSelectedChannelData({ name: "General Chat", type: "general" });
-        }}
+          onClick={() => {
+            setSelectedChannel("general");
+            setSelectedChannelData({ name: "General Chat", type: "general" });
+            navigate("/chat");
+            onNavigate?.();
+          }}
       >
         General Chat
       </div>
@@ -87,6 +100,8 @@ const Sidebar = () => {
                 onClick={() => {
                   setSelectedChannel(channel.id);
                   setSelectedChannelData({ name: channel.name, type: channel.type });
+                  navigate("/chat");
+                  onNavigate?.();
                 }}
               >
                 {channel.name}
@@ -119,6 +134,8 @@ const Sidebar = () => {
                 onClick={() => {
                   setSelectedChannel(channel.id);
                   setSelectedChannelData({ name: channel.name, type: channel.type });
+                  navigate("/chat");
+                  onNavigate?.();
                 }}
               >
                 {channel.name}
@@ -131,7 +148,10 @@ const Sidebar = () => {
       {/* Privacy Statement */}
       <div
         className="sidebar-item privacy-link"
-        onClick={() => navigate("/privacy")}
+        onClick={() => {
+          navigate("/privacy");
+          onNavigate?.();
+        }}
       >
         Privacy Statement
       </div>
@@ -140,7 +160,10 @@ const Sidebar = () => {
       {isAdmin && (
         <div
           className="sidebar-item admin-link"
-          onClick={() => navigate("/admin")}
+          onClick={() => {
+            navigate("/admin");
+            onNavigate?.();
+          }}
         >
           ⚙ Admin
         </div>
@@ -149,4 +172,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar; 
+export default Sidebar;

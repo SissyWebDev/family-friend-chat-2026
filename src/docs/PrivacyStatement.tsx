@@ -1,10 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import logo from "../assets/Logo_1_FamilyFriend_Multi_01.png";
 import "./PrivacyStatement.css";
+import { useNavigate } from "react-router-dom";
 
 const PrivacyStatement = () => {
   const navigate = useNavigate();
-
   return (
     <div className="privacy-container">
       <div className="privacy-logo-wrap">
@@ -13,8 +12,18 @@ const PrivacyStatement = () => {
 
       <div className="privacy-body">
         <div className="privacy-header">
-          <h2>Privacy Statement</h2>
-          <p className="privacy-effective">Effective Date: January 1, 2026</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <h2>Privacy Statement</h2>
+              <p className="privacy-effective">Effective Date: January 1, 2026</p>
+            </div>
+            <button
+              className="signout-btn"
+              onClick={() => navigate("/chat")}
+            >
+              ← Back to Chat
+            </button>
+          </div>
         </div>
 
         <section className="privacy-section">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -11,16 +11,21 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { unauthorized } = useAuth();
+  const { unauthorized, currentUser, loading } = useAuth();
 
-  const handleEmailSignIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
-    } catch (err) {
-      setError("Invalid email or password. Please try again.");
-    }
-  };
+    useEffect(() => {
+      if (!loading && currentUser) {
+        navigate("/announcements");
+      }
+    }, [currentUser, loading]);
+
+    const handleEmailSignIn = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        setError("Invalid email or password. Please try again.");
+      }
+    };
 
   return (
     <div className="signin-container">

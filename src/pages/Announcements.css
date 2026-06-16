@@ -1,0 +1,90 @@
+.announcements-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.announcements-etiquette {
+  background-color: #055269 ;
+  border: 3px solid #e17e23;
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.announcements-etiquette h3,
+.announcements-list h3 {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.announcements-etiquette p {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.announcements-etiquette a {
+  color: #d19525;
+  text-decoration: underline;
+}
+
+.announcements-etiquette a:hover {
+  color:#017f8d
+}
+
+.announcements-divider {
+  border-top: 2px solid #e17e23;
+  margin: 1.5rem 0;
+}
+
+.announcement-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  border-left: 4px solid #017f8d;
+}
+
+.announcement-text {
+  font-size: 1rem;
+  color: #2c3e50;
+  margin-bottom: 0.3rem;
+  white-space: pre-wrap;
+}
+
+.announcement-date {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.announcements-empty {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.etiquette-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.etiquette-toggle {
+  background: none;
+  border: none;
+  color: #017f8d;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.etiquette-toggle:hover {
+  color: #2c3e50;
+}
+
+.etiquette-body {
+  margin-top: 0.75rem;
+}

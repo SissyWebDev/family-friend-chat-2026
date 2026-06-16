@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const checkProfile = async () => {
       if (currentUser) {
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-        setHasProfile(userDoc.exists());
+        setHasProfile(userDoc.exists() && !!userDoc.data()?.screenName);
       }
       setProfileChecked(true);
     };

@@ -35,15 +35,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Check allowlist before granting access
       const allowDoc = await getDoc(doc(db, "allowedMembers", user.email));
 
-    if (!allowDoc.exists()) {
-      await signOut(auth);
-      setCurrentUser(null);
-      setIsAdmin(false);
-      setIsAllowed(false);
-      setUnauthorized(true);
-      setLoading(false);
-      return;
-    }
+      if (!allowDoc.exists()) {
+        await signOut(auth);
+        setCurrentUser(null);
+        setIsAdmin(false);
+        setIsAllowed(false);
+        setUnauthorized(true);
+        setLoading(false);
+        return;
+      }
 
       // Email is allowed — now check admin status
       const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -66,8 +66,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const content = () => {
     if (loading) return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", fontSize: "1rem", color: "#2c3e50" }}>
-        Loading...
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", backgroundColor: "#017f8d" }}>
+        <div style={{
+          width: "48px",
+          height: "48px",
+          border: "5px solid rgba(255,255,255,0.3)",
+          borderTop: "5px solid #ecb920",
+          borderRadius: "50%",
+          animation: "spin 0.8s linear infinite"
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
 

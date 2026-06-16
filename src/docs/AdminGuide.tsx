@@ -27,42 +27,53 @@ const AdminGuide = () => {
             <li>Select the <strong>family-friend-chat-2026</strong> project.</li>
             <li>Click <strong>Authentication</strong> in the left sidebar.</li>
             <li>Click <strong>Add user</strong> and enter the new member's email address and a temporary password (e.g. <strong>Welcome1234</strong>).</li>
-            <li>Send the new member an email containing:
+            <li>Copy the <strong>User UID</strong> that appears to the right of the new member email in the Authentication → Users grid.</li>
+            <li>Click <strong>Firestore</strong> in the left sidebar.</li>
               <ul>
-                <li>The link: <strong>familyfriend-chat.com/welcome</strong></li>
+                <li>In the left column choose <strong>users</strong>.</li>
+                <li>In the middle column click <strong>+ Add Document</strong>.</li>
+                <li>This opens a pop up: Paste the copied UID into the <strong>Document ID</strong> field, and click the <strong>minus button</strong> to delete the blocks for <strong>field</strong>.</li>
+                <li>Click <strong>Save</strong> at bottom right of popup</li>
+                <li>Back at the <strong>Firestore</strong> field, click <strong>allowedMembers</strong> in the left column.</li>
+                <li>In the middle column, again click <strong>+ Add Document</strong>.</li>
+                <li>This then opens that same pop up: Enter the new member's email address into the <strong>Document ID</strong> field, and click the <strong>minus button</strong> to delete the blocks for <strong>field</strong>.</li>
+                <li>Click <strong>Save</strong> at bottom right of popup</li>      
+              </ul>
+            <li>Send the new member a welcome email containing:
+              <ul>
+                <li>The link: <strong>familyfriend-chat.com</strong></li>
+                <li>Their email address</li>
                 <li>Their temporary password</li>
+                <li>A note that they will be prompted to set up their profile automatically after signing in</li>
                 <li>Instructions to set up their profile on the Welcome screen</li>
+                <li><strong>Essentials for Your Welcome Letter:</strong>
+                  <ul>
+                    <li><strong>Signing in:</strong> To avoid errors, please copy and paste both your email address and temporary password directly from this letter into the sign-in fields at <strong>familyfriend-chat.com</strong>, then click <strong>Sign In</strong>. The site will automatically bring you to our Welcome / Profile Setup page.</li>
+                    <li><strong>Read first:</strong> Once you arrive at the Welcome page, please take a moment to read the community etiquette guidelines at the top of the page before proceeding.</li>
+                    <li><strong>Screen Name:</strong> Choose a unique name that other members will see when you post in chat — this can be your real name or a preferred nickname.</li>
+                    <li><strong>Email Address:</strong> Your email address will already be filled in for you — no need to retype it.</li>
+                    <li><strong>Temporary Password:</strong> Copy and paste your temporary password from this letter into the field marked <em>Temporary Password</em>.</li>
+                    <li><strong>New Password:</strong> Create a unique password of your choice. It must be at least 8 characters long and include at least one number.</li>
+                    <li><strong>Confirm Password:</strong> Retype your new password exactly to confirm it.</li>
+                  </ul>
+                </li>
               </ul>
             </li>
-            <li>The member will complete their profile setup on the Welcome screen and create their own permanent password.</li>
+            <li>The member will complete their profile setup on the Welcome screen and create their own permanent password. They will be brought directly into the chat when finished.</li>
+            <li><p><strong>Important:</strong> These step must be completed every time a new member is added. A member whose email is not in the <strong> Firebase Authentication account</strong>, <strong>Firebase database user</strong>, and <strong>allowedMembers</strong> collection will be unable to sign in and will see a message directing them to contact the administrator.</p></li>
+          
           </ol>
-        </section>
-
-        <section className="guide-section">
-          <h3>Authorizing a New Member's Email</h3>
-          <p>In addition to creating their account in Firebase Authentication, each new member's email must also be added to the <strong>authorization list</strong> in Firestore. This is a security step that ensures only admin-approved members can access the app — even if someone obtains login credentials.</p>
-          <ol>
-            <li>Go to the <strong>Firebase Console</strong> at console.firebase.google.com and sign in.</li>
-            <li>Select the <strong>family-friend-chat-2026</strong> project.</li>
-            <li>Click <strong>Firestore Database</strong> in the left sidebar.</li>
-            <li>Open the <strong>allowedMembers</strong> collection. If it is not visible, click <strong>Start collection</strong> and name it exactly <strong>allowedMembers</strong>.</li>
-            <li>Click <strong>Add document</strong>.</li>
-            <li>In the <strong>Document ID</strong> field, enter the member's email address exactly as it appears in Firebase Authentication (e.g. <strong>jane@example.com</strong>). Do not use an auto-generated ID.</li>
-            <li>No fields are required — leave the document empty and click <strong>Save</strong>.</li>
-          </ol>
-          <p><strong>Important:</strong> This step must be completed every time a new member is added. A member whose email is not in the <strong>allowedMembers</strong> collection will be unable to sign in and will see a message directing them to contact the administrator.</p>
-          <p><strong>Removing a member:</strong> When removing a member, delete their document from <strong>allowedMembers</strong> in addition to removing them from Firebase Authentication. Both steps are required to fully revoke access.</p>
         </section>
 
         <section className="guide-section">
           <h3>Removing a Member</h3>
           <ol>
-            <li>Go to the <strong>Admin Panel</strong> and find the member in the <strong>Members</strong> section.</li>
+            <li>Go to the <strong>Admin Panel</strong> contained within the app, and find the member in the <strong>Members</strong> section.</li>
             <li>Click the red <strong>Remove</strong> button next to their name.</li>
             <li>Confirm the action in the popup.</li>
-            <li>Then go to the <strong>Firebase Console → Authentication</strong> and delete their account there as well to prevent them from signing in.</li>
+            <li>Then go to the <strong>Firebase Console → Authentication</strong> and delete their account (accessed though 3-dot popup to right).</li>
           </ol>
-          <p><strong>Note:</strong> Removing a member requires three steps: removing them from the Admin Panel Members list, deleting their Firebase Auth account, and deleting their email from the <strong>allowedMembers</strong> collection in Firestore. All three steps are required to fully revoke access.</p>
+          <p><strong>Note:</strong> Removing a member requires two steps: removing them from the app Admin Panel Members list and deleting their Firebase Auth account. Both steps are required to fully revoke access.</p>
         </section>
 
         <section className="guide-section">
@@ -79,11 +90,15 @@ const AdminGuide = () => {
         <section className="guide-section">
           <h3>Event Cards in Active Chat Channels</h3>
           <p>Each Active Chat channel should begin with a pinned Event Card containing key event details. To create one, simply send the first message in the channel using this format:</p>
-          <pre>{`📌 EVENT: Spring Gala 2026
-📅 Date: Saturday, April 12, 2026
-📍 Location: The Crystal Ballroom, Portland OR
-🎟 Tickets: [link to ticketing site]
-ℹ️ Details: [brief event description]`}</pre>
+          <div className="guide-event-card-example">
+            <p className="guide-event-card-title">📌 EVENT: Spring Gala 2026</p>
+            <ul>
+              <li>Date: Saturday, April 12, 2026</li>
+              <li>Location: The Crystal Ballroom, Portland OR</li>
+              <li>Tickets: [link to ticketing site]</li>
+              <li>Details: [brief event description]</li>
+            </ul>
+          </div>
           <p>This message will serve as the reference card for members viewing the channel.</p>
         </section>
 
