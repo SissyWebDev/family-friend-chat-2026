@@ -17,6 +17,8 @@ const AnnouncementManager = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [status, setStatus] = useState("");
   const [showArchived, setShowArchived] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
 
   useEffect(() => {
     const q = query(collection(db, "announcements"), orderBy("createdAt", "desc"));
@@ -49,6 +51,23 @@ const AnnouncementManager = () => {
     await updateDoc(doc(db, "announcements", id), { archived: !current });
   };
 
+  const startEdit = (a: Announcement) => {
+  setEditingId(a.id);
+  setEditText(a.text);
+};
+
+const cancelEdit = () => {
+  setEditingId(null);
+  setEditText("");
+};
+
+const saveEdit = async (id: string) => {
+  if (!editText.trim()) return;
+  await updateDoc(doc(db, "announcements", id), { text: editText.trim() });
+  setEditingId(null);
+  setEditText("");
+};
+
   return (
     <div>
       <textarea
@@ -66,23 +85,41 @@ const AnnouncementManager = () => {
         {announcements.filter(a => !a.archived).length === 0 && (
             <p style={{ color: "#aaa", fontSize: "0.9rem" }}>No active announcements.</p>
         )}
-        {announcements.filter(a => !a.archived).map((a) => (
+          {announcements.filter(a => !a.archived).map((a) => (
             <div key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "0.6rem 0", borderBottom: "1px solid #eee", gap: "1rem" }}>
-            <div>
-                <p style={{ margin: 0, fontSize: "0.95rem", color: "#2c3e50", whiteSpace: "pre-wrap" }}>{a.text}</p>
-                <span style={{ fontSize: "0.75rem", color: "#999" }}>
-                {a.createdAt?.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                </span>
+              {editingId === a.id ? (
+                <div style={{ flex: 1 }}>
+                  <textarea
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    rows={3}
+                    style={{ width: "100%", marginBottom: "0.5rem", padding: "0.5rem", borderRadius: "6px", border: "1px solid #ccc", fontFamily: "inherit", fontSize: "0.95rem" }}
+                  />
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <button className="admin-action-btn" onClick={() => saveEdit(a.id)}>Save</button>
+                    <button className="admin-action-btn" onClick={cancelEdit}>Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <p style={{ margin: 0, fontSize: "0.95rem", color: "#2c3e50", whiteSpace: "pre-wrap" }}>{a.text}</p>
+                    <span style={{ fontSize: "0.75rem", color: "#999" }}>
+                      {a.createdAt?.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <button className="admin-action-btn" onClick={() => startEdit(a)} style={{ whiteSpace: "nowrap" }}>
+                      Edit
+                    </button>
+                    <button className="admin-action-btn" onClick={() => toggleArchive(a.id, a.archived)} style={{ whiteSpace: "nowrap" }}>
+                      Archive
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-            <button
-                className="admin-action-btn"
-                onClick={() => toggleArchive(a.id, a.archived)}
-                style={{ whiteSpace: "nowrap" }}
-            >
-                Archive
-            </button>
-            </div>
-        ))}
+          ))}
         </div>
 
         <div style={{ marginTop: "1.5rem" }}>

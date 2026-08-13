@@ -13,6 +13,15 @@ interface Announcement {
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [etiquetteOpen, setEtiquetteOpen] = useState(false);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (id: string) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
 
   useEffect(() => {
     const q = query(
@@ -65,16 +74,29 @@ const Announcements = () => {
           {announcements.length === 0 && (
             <p className="announcements-empty">No announcements yet.</p>
           )}
-          {announcements.map((a) => (
-            <div key={a.id} className="announcement-item">
-              <p className="announcement-text">{a.text}</p>
-              <span className="announcement-date">
-                {a.createdAt?.toLocaleDateString("en-US", {
-                  month: "long", day: "numeric", year: "numeric"
-                })}
-              </span>
-            </div>
-          ))}
+          {announcements.map((a) => {
+            const isExpanded = expandedIds.has(a.id);
+            return (
+              <div key={a.id} className="announcement-item">
+                <div className="announcement-header">
+                  <span className="announcement-date">
+                    {a.createdAt?.toLocaleDateString("en-US", {
+                      month: "long", day: "numeric", year: "numeric"
+                    })}
+                  </span>
+                  <button
+                    className="announcement-toggle"
+                    onClick={() => toggleExpanded(a.id)}
+                  >
+                    {isExpanded ? "...less" : "...more"}
+                  </button>
+                </div>
+                <p className={`announcement-text ${isExpanded ? "expanded" : "collapsed"}`}>
+                  {a.text}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </MainLayout>

@@ -47,10 +47,43 @@
   border-left: 4px solid #017f8d;
 }
 
+.announcement-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.announcement-toggle {
+  background: none;
+  border: none;
+  color: #017f8d;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.announcement-toggle:hover {
+  color: #2c3e50;
+}
+
 .announcement-text {
   font-size: 1rem;
   color: #2c3e50;
   margin-bottom: 0.3rem;
+}
+
+.announcement-text.collapsed {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.announcement-text.expanded {
   white-space: pre-wrap;
 }
 
